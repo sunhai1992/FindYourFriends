@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?><LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+      <include
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/returnback" />
+    
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="33dp"
+        android:background="@drawable/invitation"
+        android:clickable="true"
+        android:onClick="invite" />
+
+  	<ListView
+  	    android:id="@+id/sharesituationlistview"
+  	    android:layout_width="fill_parent"
+  	    android:layout_height="380dp" />
+  	
+  	   <RelativeLayout 
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+	
+	<LinearLayout
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:orientation="vertical" >
+
+		<Button
+		    android:id="@+id/enter"
+		    android:layout_width="100dp"
+		    android:layout_height="50dp"
+		    android:background="@drawable/enter"
+		    android:onClick="enterin" />
+        
+        <TextView
+        android:layout_width="80dp"
+        android:layout_height="20dp" 
+        android:textColor="#000000"
+        android:text="     See   You"
+       />
+        
+	</LinearLayout>
+
+	<LinearLayout
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentTop="true"
+	    android:layout_centerHorizontal="true"
+	    android:orientation="vertical" >
+
+	    <Button
+	        android:id="@+id/exit"
+	        android:layout_width="100dp"
+		    android:layout_height="50dp"
+	        android:background="@drawable/leave"
+	        android:onClick="exit" />
+
+	    <TextView
+	        android:layout_width="80dp"
+	        android:layout_height="20dp" 
+	        android:text="          exit"
+	        android:textColor="#000000" />
+	</LinearLayout>
+
+	<LinearLayout
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentRight="true"
+	    android:layout_alignParentTop="true"
+	    android:orientation="vertical" >
+
+		<Button
+		    android:layout_width="100dp"
+		    android:layout_height="50dp"
+		    android:layout_marginRight="5dp"
+		    android:background="@drawable/logout"
+		    android:onClick="exitall" />
+
+	    <TextView
+	        android:layout_width="80dp"
+	        android:layout_height="20dp"
+	        android:layout_marginRight="5dp"
+	        android:text="        Logout"
+	        android:textColor="#000000" />
+	</LinearLayout>
+	
+   </RelativeLayout>
+    
+</LinearLayout>

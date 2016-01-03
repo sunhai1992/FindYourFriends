@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/txt"
+        android:layout_width="fill_parent"
+        android:layout_height="47dp"
+        android:layout_gravity="center"
+        android:layout_weight="0.37"
+        android:background="@drawable/fdserseeu"
+        android:clickable="true"
+        android:onClick="share"
+        android:text="see you "
+        android:textStyle="italic"
+        android:textColorHighlight="@color/dark_tree_green"
+        android:textSize="60px" />
+
+    <com.amap.api.maps2d.MapView
+        android:id="@+id/twodmap"
+        android:layout_width="fill_parent"
+        android:layout_height="433dp"
+        android:layout_weight="0.83" >
+    </com.amap.api.maps2d.MapView>
+</LinearLayout>
