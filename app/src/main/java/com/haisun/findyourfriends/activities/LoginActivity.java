@@ -37,11 +37,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * ��½��d����
- * @author lenovo
- *
- */
+
 public class LoginActivity extends Activity implements LocationSource,
 AMapLocationListener{
 	private MapView mapView;
@@ -49,16 +45,16 @@ AMapLocationListener{
     private OnLocationChangedListener mListener;
     private LocationManagerProxy mAMapLocationManager;
     private TextView txt;
-    private AVObject user;     //�û������ϵ���Ϣ
-    private AVObject friend;    //����λ�õ����ѵ������ϵ���Ϣ
+    private AVObject user;     //用户在网上的信息
+    private AVObject friend;    //分享位置的朋友的在网上的信息
     private AVObject group; 
-    private UserIno userinfo;   //��¼�û�����¼�û�����Ϣ��
+    private UserIno userinfo;   //记录用户（登录用户的信息）
     private EditText inputphonenumber;
     private String username;
     private String sharepersonname;
     private List<String> friendsname;
-	 //���ڱ�������Ƿ�����
-	private boolean firststart=false;  //��ʾ�Ƿ�Ϊ��һ�ο�ʼ��λ����ʱ��Ҫ������ӱ�ǲ���
+	 //用于标记朋友是否在线
+	private boolean firststart=false;  //表示是否为第一次开始定位，此时需要进行添加标记操作
 	private boolean[] firststarts;
 	private List<AVObject> members=new ArrayList<AVObject>();
 //	private final Timer timer = new Timer();
@@ -69,7 +65,7 @@ AMapLocationListener{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-		//��ʼ����ͼ����λ�Լ���λ��
+		//初始化地图，定位自己的位置
 		mapView=(MapView)findViewById(R.id.twodmap);
 		mapView.onCreate(savedInstanceState); 
 		aMap=mapView.getMap();
@@ -116,7 +112,7 @@ AMapLocationListener{
 	}
 
 	/**
-	 * ��ȡ����ĺ��ѵ���Ϣ,����������ߣ������ñ��Ϊtrue
+	 * 获取分享的好友的信息,如果好友在线，则设置标记为true
 	 * @param v
 	 */
 	public void share(View v)
@@ -124,9 +120,9 @@ AMapLocationListener{
 		Intent intent=new Intent(getApplicationContext(),ShareSituationActivity.class);
 		startActivity(intent);
 	}
-	
+
 	/**
-	 * ���Լ�������״̬����Ϊ����
+	 * 将自己的在线状态设置为在线
 	 */
 	public void intialization()
 	{ 
@@ -148,10 +144,10 @@ AMapLocationListener{
 		    txt=(TextView)findViewById(R.id.txt); 
  		 }
 	}
-	
-	
+
+
 	/**
-	 * �˳����Լ�������״̬����Ϊfalse����߳��˵�����
+	 * 退出后将自己的在线状态设置为false，这边出了点问题
 	 */
 	public void exit(View v)
 	{
@@ -160,22 +156,21 @@ AMapLocationListener{
 	    Intent intent=new Intent(LoginActivity.this,MainActivity.class);
 	    startActivity(intent);   
 	}
-	
+
 	/**
-	 * �Ե�ͼ��������
+	 * 对地图进行设置
 	 */
 	private void SetupMap() {
 		MyLocationStyle myLocationStyle = new MyLocationStyle();
 		myLocationStyle.myLocationIcon(BitmapDescriptorFactory
-				.fromResource(R.drawable.icon_gcoding));// ����С�����ͼ��
-		myLocationStyle.strokeColor(Color.BLACK);// ����Բ�εı߿���ɫ
-		myLocationStyle.radiusFillColor(Color.argb(100, 0, 0, 180));//����Բ�ε������ɫ
-		// myLocationStyle.anchor(int,int)//����С�����ê��
-		myLocationStyle.strokeWidth(1.0f);// ����Բ�εı߿��ϸ
+				.fromResource(R.drawable.icon_gcoding));// 设置小蓝点的图标
+		myLocationStyle.strokeColor(Color.BLACK);//设置圆形的边框颜色
+		myLocationStyle.radiusFillColor(Color.argb(100, 0, 0, 180));//设置圆形的填充颜色
+		myLocationStyle.strokeWidth(1.0f);// 设置圆形的边框粗细
 		aMap.setMyLocationStyle(myLocationStyle);
-		aMap.setLocationSource((LocationSource) this);// ���ö�λ����
-		aMap.getUiSettings().setMyLocationButtonEnabled(true);// ����Ĭ�϶�λ��ť�Ƿ���ʾ
-		aMap.setMyLocationEnabled(true);// ����Ϊtrue��ʾ��ʾ��λ�㲢�ɴ�����λ��false��ʾ���ض�λ�㲢���ɴ�����λ��Ĭ����false	
+		aMap.setLocationSource((LocationSource) this);
+		aMap.getUiSettings().setMyLocationButtonEnabled(true);// 设置默认定位按钮是否显示
+		aMap.setMyLocationEnabled(true);//设置为true表示显示定位层并可触发定位，false表示隐藏定位层并不可触发定位，默认是false
 	}
 
 	@Override
@@ -201,18 +196,14 @@ AMapLocationListener{
 		
 	}
 	
-	/**
-     * ����������д
-     */
+
     @Override
     protected void onResume() {
         super.onResume();
         mapView.onResume();
     }
  
-    /**
-     * ����������д
-     */
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -220,9 +211,7 @@ AMapLocationListener{
         deactivate();
     }
      
-    /**
-	 * ֹͣ��λ
-	 */
+
 	public void deactivate() {
 		mListener = null;
 		if (mAMapLocationManager != null) {
@@ -231,27 +220,21 @@ AMapLocationListener{
 		}
 		mAMapLocationManager = null;
 	}
-    /**
-     * ����������д
-     */
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         mapView.onSaveInstanceState(outState);
     }
  
-    /**
-     * ����������д
-     */
+
     @Override
     protected void onDestroy() {
     	super.onDestroy();
         mapView.onDestroy();
     }
 	
-    /**
-	 * ��λ�ɹ���ص����������Ҳ��ϸ����Լ�������λ��
-	 */
+
  
 	@Override
 	public void onLocationChanged(AMapLocation aLocation) {
@@ -271,14 +254,7 @@ AMapLocationListener{
 				cityCode = locBundle.getString("citycode");
 				desc = locBundle.getString("desc");
 			}
-//			String str = ("��λ�ɹ�:(" + geoLng + "," + geoLat + ")"
-//					+ "\n��    ��    :" + aLocation.getAccuracy() + "��"
-//					+ "\n��λ��ʽ:" + aLocation.getProvider() + "\n��λʱ��:"
-//					+ convertToTime(aLocation.getTime()) + "\n���б���:"
-//					+ cityCode + "\nλ������:" + desc + "\nʡ:"
-//					+ aLocation.getProvince() + "\n��:" + aLocation.getCity()
-//					+ "\n��(��):" + aLocation.getDistrict() + "\n�������:" + aLocation
-//					.getAdCode());
+
 			AVGeoPoint locc=new AVGeoPoint(geoLat,geoLng);
 			user.put("location", locc);
 	        //user.saveInBackground();  
@@ -288,15 +264,10 @@ AMapLocationListener{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-	      //  Log.i("zj","zzzzz"+str);
+
 	        if(Utils.friendon==1)
 	        { 
-//	        	try {
-//				//	friend.refresh();
-//				} catch (AVException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				} 
+
 	        	if(firststart==true){
 	        		marker.remove();
 	        	} 
@@ -316,16 +287,10 @@ AMapLocationListener{
 	        else if(Utils.friendon==2)
 	        {
 	        	int cnt=0;
-	        	if(markers!=null){//Ⱥ���г�Ա�����
+	        	if(markers!=null){
 	        		for(AVObject member:members){
-//	        			try {
-//							member.refresh();//ˢ���Ա��ȡ������
-//						} catch (AVException e) {
-//							// TODO Auto-generated catch block
-//							e.printStackTrace();
-//						}
 	        			
-	        			if(firststarts[cnt]==true){ //����Ѿ����ϱ�ǩ��ɾ��������ӱ�ǩ,��Ϊ��Ҫ���ϸ���
+	        			if(firststarts[cnt]==true){ //如果已经插上标签则删除重新添加标签,因为需要不断更新
 			        		markers[cnt].remove();
 			        	} 
 			        	else {
@@ -343,11 +308,11 @@ AMapLocationListener{
 	        	}
 	        }
 		} 
-		mListener.onLocationChanged(aLocation);// ��ʾϵͳС����	
+		mListener.onLocationChanged(aLocation);
 	}
-	
+
 	/**
-	 * ��ȡϵͳ��ǰʱ��
+	 * 获取系统当前时间
 	 * @param time
 	 * @return
 	 */
@@ -356,20 +321,16 @@ AMapLocationListener{
 		Date date = new Date(time);
 		return df.format(date);
 	}
-	
+
 	/**
-	 * ���λ
+	 * 激活定位
 	 */
 	@Override
 	public void activate(OnLocationChangedListener listener) {
 		mListener = listener;
 		if (mAMapLocationManager == null) {
 			mAMapLocationManager = LocationManagerProxy.getInstance(this);
-			/*
-			 * mAMapLocManager.setGpsEnable(false);
-			 * 1.0.2�汾��������������true��ʾ��϶�λ�а���gps��λ��false��ʾ�����綨λ��Ĭ����true Location
-			 * API��λ����GPS�������϶�λ��ʽ����һ�������Ƕ�λprovider���ڶ�������ʱ�������2000���룬������������������λ���ף����ĸ������Ƕ�λ������
-			 */
+
 			mAMapLocationManager.requestLocationUpdates(LocationProviderProxy.AMapNetwork, 2000,10, this);
 		}
 	}	
