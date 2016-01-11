@@ -39,10 +39,7 @@ public class SearchActivity extends Activity {
 	List<AVObject> avObjects; 
 	AVQuery<AVObject> query = new AVQuery<AVObject>(tableName);
 	
-	/**
-	 * ������ϵ����Ϣ
-	 * @param v
-	 */
+	
 	public void searchContact(View v)
 	{
 		ShareUtil util=new ShareUtil();
@@ -52,7 +49,7 @@ public class SearchActivity extends Activity {
 			//Toast.makeText(getApplicationContext(), String.valueOf(avObjects.size()), 1).show();
 			if(avObjects.size()==0)
 			{
-				Utils.toast(getApplicationContext(), "�����ڴ��û�");
+				Utils.toast(getApplicationContext(), "不存在此用户");
 			}
 			else {  
 			 	  userinfo=avObjects.get(0);
@@ -71,23 +68,20 @@ public class SearchActivity extends Activity {
 	 	startActivity(intent);
 	}
 	
-	/**
-	 * ���ֻ�ͨѶ¼�л����ϵ�˵���Ϣ
-	 * @param v
-	 */
+
 	String groupstr;
 	public void selectedFromContacts(View v)
 	{
 	    groupstr=groupname.getText().toString();
 		if(groupstr==null||groupstr.equals(""))
 		{
-			Utils.toast(getApplicationContext(), "������Ⱥ��");
+			Utils.toast(getApplicationContext(), "请输入群名");
 			return;
 		}
 		
 		if(ShareUtil.isNameLeagal(groupstr)==false)
 		{
-			Utils.toast(getApplicationContext(), "��Ⱥ���Ѿ�����");
+			Utils.toast(getApplicationContext(), "此群名已经存在");
 			return;
 		}
 		
@@ -95,22 +89,21 @@ public class SearchActivity extends Activity {
 		ArrayList<String> mContactsName=Utils.mContactsName;
 		//�����Ի��� 
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle("��ѡ��");
+		builder.setTitle("复选框");
 		final boolean [] defaultSelectedStatus=new boolean[mContactsName.size()];
 	    String [] str=(String[])mContactsName.toArray(new String[mContactsName.size()]); 
 		
-		//���帴ѡ��ѡ��   
+
 		builder.setMultiChoiceItems(str, defaultSelectedStatus, new DialogInterface.OnMultiChoiceClickListener()
         {
              @Override
               public void onClick(DialogInterface dialog, int which, boolean isChecked)
               { 
-            	 //�����ظ�ѡ��ȡ��������Ӧȥ�ı�item��Ӧ��boolֵ�����ȷ��ʱ���������bool[],�õ�ѡ�������  
-                   defaultSelectedStatus[which]=isChecked;
+            	  defaultSelectedStatus[which]=isChecked;
 	               }
         });
-		//���öԻ���[�϶�]��ť         
-		builder.setPositiveButton("ȷ��", new DialogInterface.OnClickListener()
+
+		builder.setPositiveButton("确定", new DialogInterface.OnClickListener()
         {
 			List<AVObject> allavObjects=Utils.allavObjects;
 			List<AVObject> addavObjects=new ArrayList<AVObject>();
@@ -119,21 +112,20 @@ public class SearchActivity extends Activity {
              public void onClick(DialogInterface dialog, int which)
              {
             	 AVObject group=new AVObject("Group");
-            	 groupids.add(LoginUtil.userinfo.getObjectId());//��Ⱥ��id�����Ⱥ��
+            	 groupids.add(LoginUtil.userinfo.getObjectId());//将群主id添加至群中
             	  
             	 for(int i=0;i<defaultSelectedStatus.length;i++)
             	 {
             		 if(defaultSelectedStatus[i])
             		 {
-            			 groupids.add(allavObjects.get(i).getObjectId());  //Ⱥ�������˵�id
+            			 groupids.add(allavObjects.get(i).getObjectId());  //群的所有人的id
             			 addavObjects.add(allavObjects.get(i));
             		 } 
             	 }
             	 group.put("groupname", groupstr);
-            	 group.put("groupowner", LoginUtil.userinfo.getObjectId());//���Ⱥ��������
-            	 //group.put("memberids", Utils.strCombine(groupids)); //��ӳ�Ա��
-            	 group.put("memberids", LoginUtil.userinfo.getObjectId()); //��ʱ��ֻtianjia qunzhu,houxuchengyuanjinlai zai tianjia
-//            	 group.saveInBackground();��߲����������ԭ����������Ҫ���objectid
+            	 group.put("groupowner", LoginUtil.userinfo.getObjectId());
+            	 //group.put("memberids", Utils.strCombine(groupids));
+            	 group.put("memberids", LoginUtil.userinfo.getObjectId());
             	 try {
 					group.save();
 				} catch (AVException e1) {
@@ -151,7 +143,7 @@ public class SearchActivity extends Activity {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-            		 String groupinvited=avobject.getString("groupinvitedstr");//��ȡ�������еı�����Ⱥ�����
+            		 String groupinvited=avobject.getString("groupinvitedstr");
             		 List<String> groupinvitedparse=new ArrayList<String>();
             		 if(groupinvited!=null&&groupinvited.length()!=0)
             		 {
@@ -159,11 +151,11 @@ public class SearchActivity extends Activity {
             		 }
             		 
             		 groupinvitedparse.add(groupid); //���Ⱥ����
-            		 avobject.put("groupinvitedstr", Utils.strCombine(groupinvitedparse));//����ÿ����Ա����������
+            		 avobject.put("groupinvitedstr", Utils.strCombine(groupinvitedparse));
             		 avobject.saveInBackground();
             	 }
             	 
-            	 String groupsharedidstr=LoginUtil.userinfo.getString("groupsharedidstr");//��Ⱥ�������Ⱥ����
+            	 String groupsharedidstr=LoginUtil.userinfo.getString("groupsharedidstr");
             	 List<String> groupsharedids=new ArrayList<String>();
             	 if(groupsharedidstr!=null&&groupsharedidstr.length()!=0)
         		 {
@@ -171,13 +163,13 @@ public class SearchActivity extends Activity {
         		 }
             	 
             	 groupsharedids.add(groupid);
-            	 LoginUtil.userinfo.put("groupsharedidsstr", Utils.strCombine(groupsharedids));//����Ⱥ���б���������Ⱥ�����Ⱥ���·�
+            	 LoginUtil.userinfo.put("groupsharedidsstr", Utils.strCombine(groupsharedids));
             	 LoginUtil.userinfo.saveInBackground();
             	 
               }
         });
-		//���öԻ���[��]��ť   
-		builder.setNegativeButton("ȡ��", new DialogInterface.OnClickListener()
+
+		builder.setNegativeButton("取消", new DialogInterface.OnClickListener()
         {
               @Override
               public void onClick(DialogInterface dialog, int which)

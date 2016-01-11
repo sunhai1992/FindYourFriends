@@ -12,11 +12,7 @@ import com.haisun.findyourfriends.utils.LoginUtil;
 import java.util.Timer;
 import java.util.TimerTask;
 
-/**
- * ���������Ƿ����˻�����Ⱥ�����Լ�����λ�ã�ÿ5�����һ��
- * @author lenovo
- *
- */
+
 public class ListenService extends Service {
 private static final String TAG = "RemindService";
 	protected static final int UPDATE_TEXT = 0;
@@ -36,7 +32,6 @@ private static final String TAG = "RemindService";
         		 LoginUtil.invitedSituation();
  	           	if(LoginUtil.flag==true)
      			{
-             		//ShareUtil.init();
              		LoginUtil.flag=false;
      			}
      			break;
@@ -55,9 +50,7 @@ private static final String TAG = "RemindService";
 		   int cnt=0;
 			@Override
 			public void run() {
-				//ִ������
-				//LoginUtil.invitedSituation();
-				
+
 				mHandler.sendEmptyMessage(UPDATE_TEXT);
 			}
 		},  1000, 5000);

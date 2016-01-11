@@ -92,7 +92,7 @@ AMapLocationListener{
 				firststarts=new boolean[memberids.size()-1];
 				for(int i=0;i<memberids.size();i++)
 					try {
-						if(LoginUtil.userinfo.getObjectId().equals(memberids.get(i)))//��ӷǱ��˵ĳ�Աobjectid
+						if(LoginUtil.userinfo.getObjectId().equals(memberids.get(i)))
 						{
 							continue;
 						}

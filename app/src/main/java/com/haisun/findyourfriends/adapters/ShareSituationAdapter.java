@@ -11,15 +11,11 @@ import com.haisun.findyourfriends.R;
 
 import java.util.List;
 
-/**
- * �Զ�����������������listview�����item
- * @author lenovo
- *
- */
+
 public class ShareSituationAdapter extends BaseAdapter {
 
-	private int resource;//����Ŀ����
-	private LayoutInflater inflater;//ʹ��XML�ļ�����View����
+	private int resource;
+	private LayoutInflater inflater;
 	List<String> situations;
 	public ShareSituationAdapter(Context context,List<String> situations,int resource) {
 		this.situations = situations;
@@ -46,25 +42,19 @@ public class ShareSituationAdapter extends BaseAdapter {
 		return 0;
 	}
 
-	/**
-	 * ȡ����Ŀ�Ľ���
-	 * @param position
-	 * @param convertView
-	 * @param parent
-	 * @return
-	 */
+
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		// TODO Auto-generated method stub
-		if(convertView==null){//���Ϊ�գ�������ǵ�һҳ
-			convertView=inflater.inflate(resource, null);//������Ŀ����	
+		if(convertView==null){                                   //如果为空，则表明是第一页
+			convertView=inflater.inflate(resource, null);        //生成条目对象
 		}
 			TextView nameView=(TextView)convertView.findViewById(R.id.name);
 			TextView phoneView=(TextView)convertView.findViewById(R.id.exit);
 			
 			String str=situations.get(position);
 			nameView.setText(position);
-			phoneView.setText("�˳�");
+			phoneView.setText("退出");
 			return convertView;
 	} 
 }

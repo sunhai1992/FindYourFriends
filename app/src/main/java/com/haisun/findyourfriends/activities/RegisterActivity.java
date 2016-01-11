@@ -36,21 +36,13 @@ public class RegisterActivity extends Activity {
 	 	
 	 	Exit.add(this);
 	}
-	
-	/**
-	 * ���ص�¼����
-	 * @param v
-	 */
+
 	public void returnback(View v)
 	{
 		Intent intent=new Intent(RegisterActivity.this,MainActivity.class);
 		RegisterActivity.this.startActivity(intent);
 	}
-	
-	/**
-	 * �ж��ֻ�����ĺϷ��Բ������ֻ���֤��
-	 * @param v
-	 */
+
 	public void getAuthcode(View v)
 	{
 		String phonenumber = inputphonenumber.getText().toString();
@@ -59,23 +51,18 @@ public class RegisterActivity extends Activity {
 			 RegisterUtils.sendCode(getApplicationContext(), phonenumber);
 	    }
 		else {
-			Utils.toast(getApplicationContext(), "�ֻ��Ÿ�ʽ����");
+			Utils.toast(getApplicationContext(), "手机号格式不对");
 		}
 	}
 	
 
-	 /**
-	  * ���ֻ���֤�������֤
-	  */
+
 	public void verifyAuthcode() {
 		 final String code = authcode.getText().toString();
 	     RegisterUtils.verifyCode(code,inputphonenumber.getText().toString());
 	}
 	 
-	/**
-	 * ע��ɹ��󷵻�������
-	 * @param v
-	 */
+
 	public void returnToMain(View v)
 	{
 		String username=inputusername.getText().toString();
@@ -93,21 +80,19 @@ public class RegisterActivity extends Activity {
 					UserIno userIno=new UserIno(username,phonenumber,password,0.0,0.0,false);
 					RegisterUtils.register(userIno);
 					Intent intent=new Intent(RegisterActivity.this,MainActivity.class);
-//			    Bundle data = new Bundle();
-//			    data.putString("name","haha"); 
-//		        intent.putExtras(data);		       
+
 					RegisterActivity.this.startActivity(intent);
 				}
 				else {
-					Utils.toast(getApplicationContext(), "��֤���������");
+					Utils.toast(getApplicationContext(), "验证码输入出错");
 				}
 			}
 			else {
-				Utils.toast(getApplicationContext(), "���ֻ����Ѿ���ע��");
+				Utils.toast(getApplicationContext(), "此手机号已经被注册");
 			}
 		}
 		else {
-			Utils.toast(getApplicationContext(), "���벻һ��");
+			Utils.toast(getApplicationContext(), "密码不一致");
 		}	 
 	}		
 }

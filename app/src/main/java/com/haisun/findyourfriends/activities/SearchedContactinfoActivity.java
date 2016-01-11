@@ -33,22 +33,16 @@ public class SearchedContactinfoActivity extends Activity {
 		Exit.add(this);
 	}
 	
-	/**
-	 * ������һҳ
-	 * @param v
-	 */
+
 	public void returnback(View v)
 	{
 		Intent intent=new Intent(getApplicationContext(),SearchActivity.class);
 		startActivity(intent);
 	}
 	
-	/**
-	 * ���±������ߵ�������
-	 * @param v
-	 */
+
 	public void invite(View v){ 
-		//��ȡ�����˵ĺ����б�
+		//获取邀请人的好友列表
 		try {
 			LoginUtil.userinfo.refresh();
 		} catch (AVException e) {
@@ -62,7 +56,7 @@ public class SearchedContactinfoActivity extends Activity {
 		}
 		String singleshareda=LoginUtil.userinfo.getString("singlesharedidsstr");
 		List<String> singlesharedaids;
-		//�жϱ��������Ƿ��Ѿ��������˵ĺ���
+		//判断被邀请人是否已经是邀请人的好友
 		boolean flag=false;
 		if(singleshareda!=null&&singleshareda.length()!=0)
 		{
@@ -79,10 +73,10 @@ public class SearchedContactinfoActivity extends Activity {
 		}
 		if(flag==true)
 		{
-			Utils.toast(getApplicationContext(), "�����Ϊ������");
+			Utils.toast(getApplicationContext(), "已添加为好友了");
 			return;
 		} 
-		//��ȡ�������ߵı�������б�,����Ѿ��ڱ������б�����Ҳ�������
+		//获取被邀请者的被邀请的列表,如果已经在被邀请列表中则也不再添加
 		String singleinvitedstr=ShareUtil.invitingPerson.getString("singleinvitedstr");
 		List<String> singleinvited; 
 		if(singleinvitedstr!=null&&singleinvitedstr.length()!=0)

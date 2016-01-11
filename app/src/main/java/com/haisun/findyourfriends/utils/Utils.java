@@ -1,13 +1,5 @@
 package com.haisun.findyourfriends.utils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import com.avos.avoscloud.AVException;
-import com.avos.avoscloud.AVObject;
-import com.avos.avoscloud.AVQuery;
-
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
@@ -16,18 +8,26 @@ import android.provider.ContactsContract.Contacts.Photo;
 import android.text.TextUtils;
 import android.widget.Toast;
 
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVObject;
+import com.avos.avoscloud.AVQuery;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class Utils {
  
 	public static int friendon=0; 
 	  public static void toast(Context context,String content) {
 		    Toast.makeText(context , content, Toast.LENGTH_SHORT).show();
 	  }
-	  
-	  /**
-	   * �ж��ֻ�����ĺϷ���
-	   * @param phonenumber
-	   * @return
-	   */
+
+	/**
+	 * 判断手机号码的合法性
+	 * @param phonenumber
+	 * @return
+	 */
 	  public static boolean isIllegalPhonenumber(String phonenumber)
 	  {
 		  char[] c = phonenumber.toCharArray();
@@ -47,7 +47,7 @@ public class Utils {
 		  return true;
 	  }
 	/**
-	 * ��Ϊaddallunique������δʵ�֣������кܶ������������������������ʵ�����ƹ��ܵ�
+	 * 因为addallunique函数暂未实现，总是有很多错误，所以这两个函数是用来实现类似功能的
 	 * @param str
 	 * @return
 	 */
@@ -83,37 +83,24 @@ public class Utils {
 		   return combinestr;
 	  }
 	      
-	    /**��ȡ��Phon���ֶ�**/  
+
 	    private static final String[] PHONES_PROJECTION = new String[] {  
-	            Phone.DISPLAY_NAME, Phone.NUMBER, Photo.PHOTO_ID,Phone.CONTACT_ID };  	     
-	    /**��ϵ����ʾ����**/  
-	    private static final int PHONES_DISPLAY_NAME_INDEX = 0;  
-	    /**�绰����**/  
-	    private static final int PHONES_NUMBER_INDEX = 1;  	      
-	    /**ͷ��ID**/  
-	    private static final int PHONES_PHOTO_ID_INDEX = 2;       
-	    /**��ϵ�˵�ID**/  
+	            Phone.DISPLAY_NAME, Phone.NUMBER, Photo.PHOTO_ID,Phone.CONTACT_ID };
+	    private static final int PHONES_DISPLAY_NAME_INDEX = 0;
+	    private static final int PHONES_NUMBER_INDEX = 1;
+	    private static final int PHONES_PHOTO_ID_INDEX = 2;
 	    private static final int PHONES_CONTACT_ID_INDEX = 3;        	  
-	   
-  //	    /**��ϵ��ͷ��**/  
-//	    private ArrayList<Bitmap> mContactsPhonto = new ArrayList<Bitmap>();  
-	   
-	    
-	    /**��ϵ�������ϵ�������Ϣ  */
-	    public static List<AVObject> allavObjects=new ArrayList<AVObject>(); 
-	    /**��ϵ������**/  
-	    public static ArrayList<String> mContactsName = new ArrayList<String>();     
-	    /**��ϵ���ֻ�����**/  
-	    public static ArrayList<String> mContactsNumber = new ArrayList<String>();   
-	    
-	  /**�õ��ֻ�ͨѶ¼��ϵ����Ϣ**/  
-	  public static void getPhoneContacts(Context mContext) {  
+
+	    public static List<AVObject> allavObjects=new ArrayList<AVObject>();
+	    public static ArrayList<String> mContactsName = new ArrayList<String>();
+	    public static ArrayList<String> mContactsNumber = new ArrayList<String>();
+	    public static void getPhoneContacts(Context mContext) {
 		  AVQuery<AVObject> query = new AVQuery<AVObject>("UserInfo");
 		  List<AVObject> avObjects; 
 		  AVObject tmp=new AVObject("UserInfo");
 	      ContentResolver resolver = mContext.getContentResolver();  
  
-	      // ��ȡ�ֻ���ϵ��  
+	      // 获取手机联系人
 	      Cursor phoneCursor = resolver.query(Phone.CONTENT_URI,PHONES_PROJECTION, null, null, null);  
 	    
 	      allavObjects.clear();
@@ -122,9 +109,9 @@ public class Utils {
 	      if (phoneCursor != null) {  
 	          while (phoneCursor.moveToNext()) {  
 	        	  
-	              //�õ��ֻ�����  
+	              //得到手机号码
 	              String phoneNumber = phoneCursor.getString(PHONES_NUMBER_INDEX);  
-	              //���ֻ�����Ϊ�յĻ���Ϊ���ֶ� ������ǰѭ��  
+	              //当手机号码为空的或者为空字段 跳过当前循环
 	              if (TextUtils.isEmpty(phoneNumber))  
 	                  continue;  
 	              query.whereEqualTo("phonenumber", phoneNumber);
@@ -140,32 +127,7 @@ public class Utils {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-	             
-	                
-//	              //�õ���ϵ������  
-//	              String contactName = phoneCursor.getString(PHONES_DISPLAY_NAME_INDEX);  
-	             
-//	              //�õ���ϵ��ID  
-//	              Long contactid = phoneCursor.getLong(PHONES_CONTACT_ID_INDEX);  
-//	    
-//	              //�õ���ϵ��ͷ��ID  
-//	              Long photoid = phoneCursor.getLong(PHONES_PHOTO_ID_INDEX);  
-//	                
-//	              //�õ���ϵ��ͷ��Bitamp  
-//	              Bitmap contactPhoto = null;  
-//	    
-//	              //photoid ����0 ��ʾ��ϵ����ͷ�� ���û�и���������ͷ�������һ��Ĭ�ϵ�  
-//	              if(photoid > 0 ) {  
-//	                  Uri uri =ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI,contactid);  
-//	                  InputStream input = ContactsContract.Contacts.openContactPhotoInputStream(resolver, uri);  
-//	                  contactPhoto = BitmapFactory.decodeStream(input);  
-//	              }else {  
-//	                  contactPhoto = BitmapFactory.decodeResource(getResources(), R.drawable.contact_photo);  
-//	              }  
-	                
-	              
-	              mContactsNumber.add(phoneNumber);  
-	            //  mContactsPhonto.add(contactPhoto);  
+				  mContactsNumber.add(phoneNumber);
 	          }  
 	          phoneCursor.close();  
 	      }  

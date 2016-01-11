@@ -1,7 +1,5 @@
 package com.haisun.findyourfriends.utils;
 
-import java.util.List;
-
 import android.content.Context;
 
 import com.avos.avoscloud.AVException;
@@ -12,17 +10,15 @@ import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
 import com.haisun.findyourfriends.models.UserIno;
 
-/**
- * ע���û�ʹ�õĺ�������
- * @author lenovo
- *
- */
+import java.util.List;
+
+
 public class RegisterUtils {
 	/**
-	 * �ж��ֻ������Ƿ�ע��
+	 * 判断手机号码是否被注册
 	 * @param phonenumber
 	 * @return
-	 * @throws AVException 
+	 * @throws AVException
 	 */
 	static String tableName = "UserInfo";
 	static AVObject user = new AVObject(tableName);
@@ -34,8 +30,7 @@ public class RegisterUtils {
 		 	List<AVObject> avObjects = query.find();
 		 	if(avObjects.size()!=0)
 		 	{
-		 		//Toast.makeText(getApplicationContext(), "���ֻ����Ѿ���ע��", 1).show();
-		 		return false;
+				return false;
 		 	}
 		} catch (AVException e) {
 			// TODO Auto-generated catch block
@@ -44,9 +39,9 @@ public class RegisterUtils {
 		}
 	 	return true;
 	}
-	
+
 	/**
-	 * �������ݿ��������һ���û���Ϣ,��ʾע��ɹ�
+	 * 网上数据库表中新增一条用户信息,表示注册成功
 	 * @param userInfo
 	 */
 	public static void register(UserIno userInfo){
@@ -57,34 +52,33 @@ public class RegisterUtils {
 		user.put("on", userInfo.isOn());
 		user.saveInBackground();
 	}
-	
-	 /**
-	  * �����ֻ���֤��
-	  * @param phone  �ֻ�����
-	  */
+
+	/**
+	 * 发送手机验证码
+	 * @param phone  手机号码
+	 */
 	 public static void sendCode(Context context,String phone)
 	 {
 		 try {
 			AVOSCloud.requestSMSCode(phone,"ZJChat","register",10);
-			Utils.toast(context, "���ͳɹ�����ע�����");
+			Utils.toast(context, "发送成功，请注意查收");
 		} catch (AVException e) {
 			// TODO Auto-generated catch block
 			//Utils.toast(getApplicationContext(), phone+"xxxx");
 			e.printStackTrace();
 		} 
 	 }
-	  
-	 /**
-		 * ��֤�ֻ���֤��
-		 * @param code
-		 */
+
+	/**
+	 * 验证手机验证码
+	 * @param code
+	 */
 		public static boolean veryfyflag=false;
 		public static void verifyCode(String code,String phonenumber) {
 			 AVOSCloud.verifySMSCodeInBackground(code,phonenumber, new AVMobilePhoneVerifyCallback() {
 			      @Override
 			      public void done(AVException e) {
 			    	  if(e!=null){
-			      //�˴���������û���Ҫ��ɵĲ���
 			    		  veryfyflag=false;
 			    		  
 			    	  }

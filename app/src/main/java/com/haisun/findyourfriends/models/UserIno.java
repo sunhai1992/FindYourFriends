@@ -3,7 +3,7 @@ package com.haisun.findyourfriends.models;
 import java.io.Serializable;
 
 /**
- * �û���Ϣ��
+ * 用户信息类
  */
 public class UserIno implements Serializable  {
 	private String username;

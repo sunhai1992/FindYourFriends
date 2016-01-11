@@ -1,34 +1,30 @@
 package com.haisun.findyourfriends.utils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import android.content.Context;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
 
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
 import com.haisun.findyourfriends.R;
 
-import android.content.Context;
-import android.widget.ListView;
-import android.widget.SimpleAdapter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
-/**
- * �������λ�õ�һЩ��Ϣ
- * @author lenovo
- *
- */
+
 public class ShareUtil {
 
-	public static List<String> singleShareName=new ArrayList<String>();//����ʱ����Ա������
-	public static List<String> groupShareName=new ArrayList<String>();//Ⱥ��ʱ��Ⱥ������
-	public static List<String> singleShareid=new ArrayList<String>();//����ʱ����Ա��id
-	public static List<String> groupShareid=new ArrayList<String>();//Ⱥ��ʱ��Ⱥ��id
-	
+	public static List<String> singleShareName=new ArrayList<String>();//单聊时，成员的名字
+	public static List<String> groupShareName=new ArrayList<String>();//群聊时，群的名字
+	public static List<String> singleShareid=new ArrayList<String>();//单聊时，成员的id
+	public static List<String> groupShareid=new ArrayList<String>();//群聊时，群的id
+
 	public static AVObject shareperson=new AVObject("UserInfo");
 	public static AVObject sharegroup=new AVObject("Group");
 	public static ListView listview;
-	public static Context context;//��¼���ǰ���listview��һ�������context
+	public static Context context;//记录包含listview那一个界面的context
 	public ShareUtil(){
 		
 	}
@@ -44,11 +40,7 @@ public class ShareUtil {
 		this.invitingPerson=invitingPerson;
 	}
 	
-	/**
-	 * ��ʼ��ʱ������
-	 * @param context
-	 * @param listView
-	 */
+
 	public static void init()
 	{ 
 		try {
@@ -72,7 +64,7 @@ public class ShareUtil {
 		AVQuery<AVObject> query1 = new AVQuery<AVObject>("Group");
 		if(singleShareid==null&&groupShareid ==null)
 		{
-			return ;//Utils.toast(context, "��ʱδ���κ��˷���λ��");
+			return ;
 		}
 		else {
 			
@@ -92,7 +84,6 @@ public class ShareUtil {
 				{ 
 					HashMap<String, Object> item=new HashMap<String, Object>();
 					item.put("name",singlesharename);
-					////	item.put("exit","�˳�");
 					data.add(item);
 				}	
 			}
@@ -113,14 +104,9 @@ public class ShareUtil {
 				{ 
 					HashMap<String, Object> item=new HashMap<String, Object>();
 					item.put("name",groupsharename);
-				////	item.put("exit","�˳�");
 					data.add(item);
 				}
-			} 
-//			SimpleAdapter adapter=new SimpleAdapter(context, data, R.layout.item, 
-//			        new String[]{"name","exit"},new int[]{R.id.name,R.id.exit} );		
-//					listview.setAdapter(adapter);
-			
+			}
 			SimpleAdapter adapter=new SimpleAdapter(context, data, R.layout.item,
 			        new String[]{"name" },new int[]{R.id.name } );		
 					listview.setAdapter(adapter);
@@ -150,81 +136,18 @@ public class ShareUtil {
 		}
 		return null;
 	}
-	
-//	/**
-//	 * ��ʼ��ʱ������
-//	 * @param context
-//	 * @param listView
-//	 */
-//	public static void init()
-//	{ 
-//		singleShareid=LoginUtil.userinfo.getList("singlesharedids");
-//		groupShareid=LoginUtil.userinfo.getList("groupsharedids");
-//		List<HashMap<String, Object>> data=new ArrayList<HashMap<String,Object>>();
-//		AVQuery<AVObject> query = new AVQuery<AVObject>("UserInfo");
-//		if(singleShareid==null&&groupShareid ==null)
-//		{
-//			 ;//Utils.toast(context, "��ʱδ���κ��˷���λ��");
-//		}
-//		else {
-//			if(singleShareid!=null)
-//			{
-//				singleShareName.clear();
-//				for(String shareid:singleShareid)
-//				{ 
-//					try {
-//						singleShareName.add(query.get(shareid).getString("username"));
-//					} catch (AVException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					}
-//				}
-//				for(String singlesharename:singleShareName)
-//				{
-//					HashMap<String, Object> item=new HashMap<String, Object>();
-//					item.put("name",singlesharename);
-//					item.put("exit","�˳�");
-//					data.add(item);
-//				}	
-//			}
-//			if(groupShareid!=null)
-//			{
-//				groupShareName.clear();
-//				for(String shareid:groupShareid)
-//				{ 
-//					try {
-//						groupShareName.add(query.get(shareid).getString("groupname"));
-//					} catch (AVException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					}
-//				}
-//				for(String groupsharename:groupShareName)
-//				{
-//					HashMap<String, Object> item=new HashMap<String, Object>();
-//					item.put("name",groupsharename);
-//					item.put("exit","�˳�");
-//					data.add(item);
-//				}
-//			} 
-//			 
-//			SimpleAdapter adapter=new SimpleAdapter(context, data, R.layout.item, 
-//			        new String[]{"name","exit"},new int[]{R.id.name,R.id.exit} );	
-//					listview.setAdapter(adapter);
-//		}	 
-//	}
-	
+
 	/**
-	 * ���û���Ϊusername���û���Ⱥ��ɾ����ͬʱ���û��б���ɾ��Ⱥ����Ϣ
+	 * 将用户名为username的用户从群中删除，同时在用户列表中删除群的信息
 	 * @param username
 	 */
+
 	public static void deleteMemberFromGroup(String username)
 	{
 		AVQuery<AVObject> query= new AVQuery<AVObject>("Group");
 		try {
-			sharegroup=query.get(groupid(username));//��ȡȺ��
-			
-			//��ȡȺ��id�������û��б���ɾ������Ⱥ��id����������Ⱥ��ϵ
+			sharegroup=query.get(groupid(username));
+			//获取群的id，并从用户列表中删除所在群的id，表明脱离群关系
 			String objectid=sharegroup.getObjectId();
 			groupShareid.remove(objectid);
 			if(groupShareid!=null&&groupShareid.size()!=0){
@@ -235,8 +158,8 @@ public class ShareUtil {
 			}
 			LoginUtil.userinfo.save();
 			
-			//��Ⱥ��ɾ���û�����Ϣ,���ȺΪ�գ���ɾ��Ⱥ
-			String memberidsstr=sharegroup.getString("memberids");//��ȡ����Ⱥ��Ա��id
+			//从群中删除用户的信息,如果群为空，则删除群
+			String memberidsstr=sharegroup.getString("memberids");//�获取所有群成员的id
 			List<String> memberids=Utils.strParse(memberidsstr);
 			for(String id:memberids){
 				if(id.equals(LoginUtil.userinfo.getObjectId())){
@@ -256,22 +179,22 @@ public class ShareUtil {
 			e.printStackTrace();
 		}
 	}
-	
+
+
 	/**
-	 * ɾ�������û���Ϊusername��Ա
-	 * @param id
+	 * 删除单个用户名为username成员
 	 */
 	public static void deleteMember(String username)
 	{
 		AVObject person=new AVObject(); 
 		AVQuery<AVObject> query1 = new AVQuery<AVObject>("UserInfo");
 		try {
-			 person=query1.get(id(username));//��ȡɾ���û�����AVObject
+			 person=query1.get(id(username));
 			 String singlesharedstr=person.getString("singlesharedidsstr");
 			 List<String> singleids=Utils.strParse(singlesharedstr);
 			 singleids.remove(LoginUtil.userinfo.getObjectId());
  
-			 //�ӱ�������һ��ɾ����½�û�
+			 //从被动好友一方删除登陆用户
 			 if(singleids!=null&&singleids.size()!=0){
 				 person.put("singlesharedidsstr", Utils.strCombine(singleids));
 			 }
@@ -279,7 +202,7 @@ public class ShareUtil {
 				 person.put("singlesharedidsstr","");
 			 }
 			 person.save();
-			 //�ӵ�½�û��б���ɾ��
+			 //从登陆用户列表中删除
 			 singleShareid.remove(person.getObjectId());
 			 if(singleShareid!=null&&singleShareid.size()!=0){
 				 LoginUtil.userinfo.put("singlesharedidsstr", Utils.strCombine(singleShareid));

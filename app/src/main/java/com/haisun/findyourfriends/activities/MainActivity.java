@@ -33,10 +33,7 @@ public class MainActivity extends ActionBarActivity {
 	    Exit.add(this);
 	}
 
-	/**
-	 * ��ת����½֮��Ľ���
-	 * @param v
-	 */
+
 	public void login(View v){
 		    String username=inputusername.getText().toString();
 		    String password=inputpassword.getText().toString();
@@ -51,47 +48,8 @@ public class MainActivity extends ActionBarActivity {
 		    }
 	}
 	
-//	List<AVObject> avObjects;
-//	public boolean legal(String inputname,String inputpassword){
-//		String tableName = "UserInfo";
-//		AVObject userinfo = new AVObject(tableName);
-//	 	AVQuery<AVObject> query = new AVQuery<AVObject>(tableName);
-//	 	
-//	 	query.whereEqualTo("username", inputname);
-//	    query.whereEqualTo("password", inputpassword);
-//
-//	 	try {
-//		    avObjects = query.find();
-//			//Toast.makeText(getApplicationContext(), String.valueOf(avObjects.size()), 1).show();
-//			if(avObjects.size()==0)
-//			{
-//				Toast.makeText(getApplicationContext(), "�����ڴ��û�", 1).show();
-//				return false;
-//			}
-//			else { 
-//			 	 userinfo=avObjects.get(0);
-//			 	 if(userinfo==null){
-//			 		Toast.makeText(getApplicationContext(), "caos", 1).show();
-//			 	 }else{
-//				 	 user.setPassword(userinfo.getString("password").toString());
-//				 	 user.setUsername(userinfo.getString("username"));
-//				 	 user.setLatitude(userinfo.getDouble("latitude"));
-//				 	 user.setLongtitude(userinfo.getDouble("longtitude"));
-//				 	 user.setPhonenumber(userinfo.getString("phonenumber"));
-//				 	 user.setOn(true);
-//			 	 } 
-//			}
-//		} catch (AVException e) { 
-//			e.printStackTrace();
-//			return false;
-//		}
-//	 	return true;
-//	}
-	
-	/**
-	 * δע�������ע��������ע��
-	 * @param v
-	 */
+
+
 	public void register(View v){
 		Intent intent=new Intent(MainActivity.this,RegisterActivity.class);
 	    Bundle data = new Bundle();
@@ -102,16 +60,12 @@ public class MainActivity extends ActionBarActivity {
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
 			return true;
